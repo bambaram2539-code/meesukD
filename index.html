@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:#f4f7f4;color:#173c2c}
+    .wrap{max-width:560px;margin:auto;padding:28px 18px}.card{background:#fff;border-radius:22px;padding:26px;box-shadow:0 12px 35px #173c2c18}
+    .brand{text-align:center;margin-bottom:22px}.brand h1{margin:5px 0;font-size:25px}.brand p{margin:0;color:#6b7d74}
+    label{display:block;font-weight:650;margin:15px 0 6px}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #d8e2dc;border-radius:12px;font:inherit;background:#fff}
+    textarea{min-height:80px;resize:vertical}button{width:100%;border:0;border-radius:13px;padding:14px;margin-top:20px;background:#174f38;color:white;font-size:17px;font-weight:700;cursor:pointer}
+    button:disabled{opacity:.6}.req{color:#b33}.success{text-align:center;padding:12px 0}.reg{font-size:30px;font-weight:800;letter-spacing:1px;margin:12px 0}.hidden{display:none}.small{font-size:13px;color:#74827b;text-align:center;margin-top:16px}
+  </style>
+</head>
+<body><div class="wrap"><div class="card">
+  <div class="brand"><h1>มีสุข</h1><p>ระบบลงทะเบียนเข้างาน</p></div>
+  <form id="form">
+    <label>ชื่อ-นามสกุล <span class="req">*</span></label><input name="fullName" required autocomplete="name">
+    <label>เบอร์โทร</label><input name="phone" type="tel" inputmode="tel" autocomplete="tel">
+    <label>หน่วยงาน / บริษัท</label><input name="organization">
+    <label>จำนวนผู้ติดตาม</label><select name="guests"><option value="0">0 คน</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+    <label>หมายเหตุ</label><textarea name="note"></textarea>
+    <button id="submit" type="submit">ลงทะเบียนเข้างาน</button>
+  </form>
+  <div id="success" class="success hidden"><div>ลงทะเบียนสำเร็จ ✓</div><div id="reg" class="reg"></div><div id="who"></div><p>กรุณาเก็บเลขทะเบียนนี้ไว้สำหรับเช็กอินหน้างาน</p><button onclick="location.reload()">ลงทะเบียนคนถัดไป</button></div>
+  <div class="small">MESOOK CATERING AND ORGANIZE CO., LTD.</div>
+</div></div>
+<script>
+const form=document.getElementById('form'),btn=document.getElementById('submit');
+form.addEventListener('submit',e=>{e.preventDefault();btn.disabled=true;btn.textContent='กำลังบันทึก...';const data=Object.fromEntries(new FormData(form).entries());google.script.run.withSuccessHandler(r=>{form.classList.add('hidden');document.getElementById('reg').textContent=r.regNo;document.getElementById('who').textContent=r.name;document.getElementById('success').classList.remove('hidden')}).withFailureHandler(err=>{alert(err.message||'เกิดข้อผิดพลาด');btn.disabled=false;btn.textContent='ลงทะเบียนเข้างาน'}).registerGuest(data)});
+</script></body></html>
